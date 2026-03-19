@@ -11,4 +11,6 @@ dependencies:
   - python-dotenv=1.0.0
   - pytest=7.4.3
   - pip:
-    - fredapi==0.5.1
+      - fredapi==0.5.1
+      - plotly==5.18.0
+      - streamlit==1.31.0
