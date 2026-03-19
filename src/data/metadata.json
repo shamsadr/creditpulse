@@ -1,0 +1,75 @@
+{
+  "pulled_at": "2026-03-19T17:04:15.313408+00:00",
+  "n_rows": 315,
+  "n_features": 38,
+  "columns": [
+    "delinquency_credit_card",
+    "delinquency_commercial",
+    "chargeoff_credit_card",
+    "unemployment_rate",
+    "credit_spread_baa",
+    "fed_funds_rate",
+    "recession_flag",
+    "delinquency_credit_card_lag1",
+    "delinquency_credit_card_lag3",
+    "delinquency_credit_card_lag6",
+    "delinquency_credit_card_rolling3_mean",
+    "delinquency_credit_card_mom",
+    "delinquency_commercial_lag1",
+    "delinquency_commercial_lag3",
+    "delinquency_commercial_lag6",
+    "delinquency_commercial_rolling3_mean",
+    "delinquency_commercial_mom",
+    "chargeoff_credit_card_lag1",
+    "chargeoff_credit_card_lag3",
+    "chargeoff_credit_card_lag6",
+    "chargeoff_credit_card_rolling3_mean",
+    "chargeoff_credit_card_mom",
+    "unemployment_rate_lag1",
+    "unemployment_rate_lag3",
+    "unemployment_rate_lag6",
+    "unemployment_rate_rolling3_mean",
+    "unemployment_rate_mom",
+    "credit_spread_baa_lag1",
+    "credit_spread_baa_lag3",
+    "credit_spread_baa_lag6",
+    "credit_spread_baa_rolling3_mean",
+    "credit_spread_baa_mom",
+    "fed_funds_rate_lag1",
+    "fed_funds_rate_lag3",
+    "fed_funds_rate_lag6",
+    "fed_funds_rate_rolling3_mean",
+    "fed_funds_rate_mom",
+    "credit_stress_index"
+  ],
+  "validation": {
+    "date_range": {
+      "start": "2000-01-31",
+      "end": "2026-03-31",
+      "n_months": 315
+    },
+    "missing_values": {
+      "delinquency_credit_card": 5,
+      "delinquency_commercial": 5,
+      "chargeoff_credit_card": 5,
+      "unemployment_rate": 1,
+      "credit_spread_baa": 0,
+      "fed_funds_rate": 1,
+      "recession_indicator": 1
+    },
+    "long_gaps_flagged": {
+      "delinquency_credit_card": 5,
+      "delinquency_commercial": 5,
+      "chargeoff_credit_card": 5
+    }
+  },
+  "series_descriptions": {
+    "delinquency_credit_card": "DRCCLACBS",
+    "delinquency_commercial": "DRBLACBS",
+    "chargeoff_credit_card": "CORCCACBS",
+    "unemployment_rate": "UNRATE",
+    "credit_spread_baa": "BAA10Y",
+    "fed_funds_rate": "FEDFUNDS",
+    "recession_indicator": "USREC"
+  }
+}
