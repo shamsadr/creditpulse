@@ -9,7 +9,7 @@
 
 ## Live Demo
 
-🚀 **[Launch Dashboard →](https://your-app-name.streamlit.app)** *(update link after deploying)*
+🚀 **[Launch Dashboard →](https://credit-pulse.streamlit.app/)** *(update link after deploying)*
 
 ![Python](https://img.shields.io/badge/Python-3.11+-blue)
 ![Data](https://img.shields.io/badge/Data-FRED%20API-red)
