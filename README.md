@@ -1,84 +1,92 @@
 # CreditPulse 📊
 ### Project 1 of 3 — Credit Risk Series
 
-> *A production-ready data pipeline for pulling, cleaning, and feature-engineering macroeconomic
-> credit indicators from the Federal Reserve (FRED). Foundation for downstream PD modeling and
-> credit migration analysis.*
+> *A live macroeconomic credit risk dashboard powered by real Federal Reserve data.
+> Pulls, cleans, and visualizes 6 key credit indicators to answer one question:
+> **How risky is it to lend money right now, compared to history?***
+
+---
+
+## Live Demo
+
+🚀 **[Launch Dashboard →](https://your-app-name.streamlit.app)** *(update link after deploying)*
+
+![Python](https://img.shields.io/badge/Python-3.11+-blue)
+![Data](https://img.shields.io/badge/Data-FRED%20API-red)
 
 ---
 
 ## Problem
 
-Credit risk analysts and quant teams rely on macroeconomic signals — delinquency rates, credit
-spreads, unemployment — to forecast loan defaults and stress-test portfolios. Building a clean,
-reproducible pipeline for these indicators is the unglamorous but essential first step that most
-academic projects skip. This project does it right.
+Credit risk analysts and quant teams rely on macroeconomic signals — delinquency rates,
+credit spreads, unemployment — to forecast loan defaults and stress-test portfolios.
+This dashboard makes those signals visible and interpretable in real time,
+directly from the Federal Reserve's data API.
 
-## Approach
+## The Core Insight
 
-- Pulls 6 key FRED credit indicators via the `fredapi` library (free, real data)
-- Cleans and aligns time series to a common monthly frequency
-- Engineers lag features, rolling statistics, and recession flags (NBER-based)
-- Exports a modeling-ready dataset with full provenance metadata
-- Designed to feed directly into Project 2 (PD scorecard) and Project 3 (Markov migration model)
+Credit risk follows a predictable sequence:
 
-**Key indicators pulled:**
-| Series | FRED ID | What it measures |
-|--------|---------|-----------------|
-| Consumer credit delinquency rate | `DRCCLACBS` | % of credit card loans 30+ days past due |
-| Commercial & industrial loan delinquency | `DRBLACBS` | Business loan stress |
-| Credit card charge-off rate | `CORCCACBS` | Realized losses on credit cards |
-| Unemployment rate | `UNRATE` | Macro stress indicator |
-| BAA-AAA credit spread | `BAA10Y` | Market-implied credit risk premium |
-| Federal funds rate | `FEDFUNDS` | Interest rate environment |
+```
+Credit spreads widen → Unemployment rises → Delinquencies spike → Charge-offs follow
+```
 
-**Design choices:**
-- Forward-fill then backward-fill for minor gaps (< 3 months); flag longer gaps
-- All series normalized to 2000-01-01 baseline for comparability
-- Recession periods flagged using FRED's `USREC` indicator
+**Credit spreads lead by 3–6 months.** Delinquencies confirm what spreads already predicted.
+The Credit Stress Index combines both into a single read on the current credit cycle.
 
-## Results / Key Outputs
+## What the Dashboard Shows
 
-Running `python src/main.py` produces:
+| Section | What it answers |
+|---------|----------------|
+| **Bottom Line** | Current stress level vs. history (percentile rank since 2000) |
+| **Credit Stress Index** | Composite leading/lagging indicator with recession shading |
+| **6 FRED Indicators** | Individual time series: delinquency, charge-offs, spreads, unemployment, fed funds |
+| **Correlation Heatmap** | Which indicators move together — and which lead vs. lag |
+| **Data Quality Report** | Transparency on missing data, pull timestamps, series provenance |
 
-1. `data/creditpulse_features.csv` — cleaned, feature-engineered dataset (monthly, 2000–present)
-2. `data/metadata.json` — pull timestamp, series descriptions, missing data report
-3. Console summary: date range, shape, missing value counts, correlation matrix snippet
+## Key Indicators
+
+| Series | FRED ID | Type |
+|--------|---------|------|
+| Credit card delinquency rate | `DRCCLACBS` | Lagging |
+| Commercial loan delinquency | `DRBLACBS` | Lagging |
+| Credit card charge-off rate | `CORCCACBS` | Lagging |
+| Unemployment rate | `UNRATE` | Coincident |
+| BAA credit spread | `BAA10Y` | **Leading** |
+| Federal funds rate | `FEDFUNDS` | Policy |
 
 ## Tech Stack
 
-- Python 3.11+, `fredapi`, `pandas`, `numpy`, `requests`
-- Modular ETL design: fetch → validate → engineer → export (each step independently testable)
-- FRED API key via environment variable (never hardcoded)
+- **Python 3.11+** — pandas, numpy, plotly, streamlit, fredapi
+- **Data:** Federal Reserve Bank of St. Louis (FRED) — free, authoritative, reproducible
+- **Pipeline:** modular ETL — fetch → validate → engineer → visualize
+- **Features engineered:** lags (1/3/6 month), rolling means, MoM changes, credit stress index
 
-## How to Run
+## How to Run Locally
 
 **Step 1 — Get a free FRED API key (30 seconds):**
 ```
 1. Go to https://fred.stlouisfed.org/docs/api/api_key.html
 2. Click "Request API Key" — instant approval
-3. Copy your key
 ```
 
-**Step 2 — Set up environment:**
+**Step 2 — Clone and install:**
 ```bash
-conda env create -f environment.yml
-conda activate creditpulse
+git clone https://github.com/shamsadr/creditpulse.git
+cd creditpulse
+pip install fredapi pandas numpy plotly streamlit
 ```
 
-**Step 3 — Add your API key:**
+**Step 3 — Run the dashboard:**
 ```bash
 export FRED_API_KEY="your_key_here"
-# Or add to ~/.zshrc to persist it
+streamlit run app.py
 ```
 
-**Step 4 — Run:**
+**Step 4 — Or run the CLI pipeline only:**
 ```bash
 python src/main.py
-# With custom date range:
-python src/main.py --start 2010-01-01 --end 2024-12-31
-# Offline mode (uses cached data if available):
-python src/main.py --offline
+# Output: data/creditpulse_features.csv + data/metadata.json
 ```
 
 **Step 5 — Run tests:**
@@ -90,33 +98,45 @@ pytest tests/ -v
 
 ```
 credit-risk-series/
-├── 01-creditpulse/        ← YOU ARE HERE: data pipeline
+├── 01-creditpulse/        ← YOU ARE HERE: live data pipeline + dashboard
 ├── 02-creditscore/        ← Coming next: PD model (logistic regression scorecard)
-└── 03-creditmigration/    ← Coming later: Markov chain rating transition model
+└── 03-creditmigration/    ← Coming later: Markov chain credit rating transition model
 ```
 
-Each project imports from the previous one. `creditpulse_features.csv` is the input to Project 2.
+`creditpulse_features.csv` feeds directly into Project 2 as the modeling dataset.
 
 ---
 
 ## Interview Talking Points
 
 - **What problem are you solving?**
-  "Credit risk models are only as good as their inputs — I built the data foundation first, pulling
-  real Federal Reserve indicators and engineering features that proxy for credit cycle stress."
+  "Credit risk models are only as good as their inputs — I built the data foundation first,
+  pulling real Federal Reserve indicators and engineering features that proxy for credit
+  cycle stress, then visualized them in a live dashboard."
 
 - **Why this approach?**
-  "FRED is the authoritative source for U.S. macro data, it's free, and fredapi gives reproducible
-  pulls — any analyst can verify my data provenance, which matters in a risk context."
+  "FRED is the authoritative source for U.S. macro data, it's free, and fredapi gives
+  reproducible pulls — any analyst can verify my data provenance, which matters in a
+  risk context."
+
+- **What does the dashboard tell you right now?**
+  "Credit stress is at the 15th percentile since 2000 — conditions are relatively benign.
+  Spreads are tight and delinquencies are moderate, which historically precedes either
+  continued stability or a gradual turn depending on where the Fed moves rates."
 
 - **What would you improve with more time?**
-  "I'd add loan-level data (e.g., HMDA mortgage data or Fannie Mae loan performance) and build
-  an automated refresh scheduler so the pipeline stays current."
+  "I'd add loan-level data (HMDA or Fannie Mae performance data) and automate daily
+  refreshes so the dashboard stays current without manual reruns."
 
 - **What did you learn?**
-  "Macro credit indicators are highly autocorrelated and lag the business cycle — the feature
-  engineering (lags, rolling stats, recession flags) is where the real signal lives."
+  "Credit spreads lead delinquencies by 3–6 months — the lag structure in the data
+  confirms what theory predicts, and it's directly visible in the correlation heatmap."
 
 ---
 
-*Part of a 3-project credit risk portfolio. See also: [CreditScore](../02-creditscore) and [CreditMigration](../03-creditmigration)*
+*Part of a 3-project credit risk portfolio.*
+*See also: CreditScore (Project 2) and CreditMigration (Project 3) — coming soon.*
+
+---
+
+*Built by [Shamsad Rahman](https://github.com/shamsadr) · Data: [FRED](https://fred.stlouisfed.org)*
