@@ -219,10 +219,10 @@ report: dict = st.session_state["report"]
 st.markdown("## 🎯 Bottom Line")
 st.markdown(
     """
-<div class="insight-box">
+<div style="background:#1e3a5f; border-radius:8px; padding:16px 20px; border-left:4px solid #4da6ff; margin:12px 0; color:#ffffff;">
 <strong>What this dashboard answers:</strong> How risky is it to lend money right now, compared to history?<br><br>
 Credit risk doesn't appear overnight. It follows a predictable sequence:<br>
-<code>Credit spreads widen → Unemployment rises → Delinquencies spike → Charge-offs follow</code><br><br>
+<code style="background:#0d2137; color:#4da6ff; padding:4px 8px; border-radius:4px;">Credit spreads widen → Unemployment rises → Delinquencies spike → Charge-offs follow</code><br><br>
 <strong>Credit spreads lead by 3–6 months.</strong> Delinquencies confirm what spreads already predicted.
 The Credit Stress Index below combines both to give you a single read on where we are in the credit cycle.
 </div>
@@ -417,7 +417,7 @@ st.plotly_chart(fig_corr, use_container_width=True)
 
 st.markdown(
     """
-<div class="insight-box">
+<div style="background:#1e3a5f; border-radius:8px; padding:16px 20px; border-left:4px solid #4da6ff; margin:12px 0; color:#ffffff;">
 <strong>Key insight:</strong> Delinquency rates, charge-offs, and unemployment are tightly correlated —
 they all move together during downturns. Credit spreads (BAA) move somewhat independently,
 confirming their role as a <em>leading</em> rather than coincident indicator.
